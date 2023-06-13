@@ -1,7 +1,9 @@
 import { useReducer } from "react"
-import DigitButton from "./DigitButton"
-import OperationButton from "./OperationButton"
 import "./App.css"
+import Navbar from "./Navbar"
+import BasicCalc from "./pages/BasicCalc"
+import BMICalc from "./pages/BMICalc"
+import Home from "./pages/home"
 
 export const ACTIONS = {
   ADD_DIGIT: "add-digit",
@@ -11,7 +13,7 @@ export const ACTIONS = {
   EVALUATE: "evaluate",
 }
 
-function reducer(state, { type, payload }) {
+export function reducer(state, { type, payload }) {
   switch (type) {
     case ACTIONS.ADD_DIGIT:
       if (state.overwrite) {
@@ -98,7 +100,7 @@ function reducer(state, { type, payload }) {
   }
 }
 
-function evaluate({ currentOperand, previousOperand, operation }) {
+export function evaluate({ currentOperand, previousOperand, operation }) {
   const prev = parseFloat(previousOperand)
   const current = parseFloat(currentOperand)
   if (isNaN(prev) || isNaN(current)) return ""
@@ -122,10 +124,11 @@ function evaluate({ currentOperand, previousOperand, operation }) {
   return computation.toString()
 }
 
-const INTEGER_FORMATTER = new Intl.NumberFormat("en-us", {
+export const INTEGER_FORMATTER = new Intl.NumberFormat("en-us", {
   maximumFractionDigits: 0,
 })
-function formatOperand(operand) {
+
+export function formatOperand(operand) {
   if (operand == null) return
   const [integer, decimal] = operand.split(".")
   if (decimal == null) return INTEGER_FORMATTER.format(integer)
@@ -133,50 +136,36 @@ function formatOperand(operand) {
 }
 
 function App() {
-  const [{ currentOperand, previousOperand, operation }, dispatch] = useReducer(
+   const [{ currentOperand, previousOperand, operation }, dispatch] = useReducer(
     reducer,
     {}
-  )
+  ) 
+  let component
+  console.log(window.location.pathname)
+  switch (window.location.pathname){
+    case "/":
+      component = <Home/>
+      break
+
+    case "/Basic%20Calculator-link":
+      component = <BasicCalc/>
+      break
+
+    case "/BMI%20Calculator-link":
+      component = <BMICalc/>
+      break
+    
+    default:
+      break
+  }
 
   return (
-    <div className="calculator-grid">
-      <div className="output">
-        <div className="previous-operand">
-          {formatOperand(previousOperand)} {operation}
-        </div>
-        <div className="current-operand">{formatOperand(currentOperand)}</div>
-      </div>
-      <button
-        className="span-two"
-        onClick={() => dispatch({ type: ACTIONS.CLEAR })}
-      >
-        AC
-      </button>
-      <button onClick={() => dispatch({ type: ACTIONS.DELETE_DIGIT })}>
-        DEL
-      </button>
-      <OperationButton operation="÷" dispatch={dispatch} />
-      <DigitButton digit="1" dispatch={dispatch} />
-      <DigitButton digit="2" dispatch={dispatch} />
-      <DigitButton digit="3" dispatch={dispatch} />
-      <OperationButton operation="*" dispatch={dispatch} />
-      <DigitButton digit="4" dispatch={dispatch} />
-      <DigitButton digit="5" dispatch={dispatch} />
-      <DigitButton digit="6" dispatch={dispatch} />
-      <OperationButton operation="+" dispatch={dispatch} />
-      <DigitButton digit="7" dispatch={dispatch} />
-      <DigitButton digit="8" dispatch={dispatch} />
-      <DigitButton digit="9" dispatch={dispatch} />
-      <OperationButton operation="-" dispatch={dispatch} />
-      <DigitButton digit="." dispatch={dispatch} />
-      <DigitButton digit="0" dispatch={dispatch} />
-      <button
-        className="span-two"
-        onClick={() => dispatch({ type: ACTIONS.EVALUATE })}
-      >
-        =
-      </button>
-    </div>
+    <>
+      <Navbar/>
+      <div className="container"> {component} </div>
+      
+
+    </>
   )
 }
 
