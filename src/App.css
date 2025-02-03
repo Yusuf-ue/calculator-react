@@ -4,7 +4,7 @@ body{
 }
 
 .nav {
-  background-color: #333;
+  background-color: #332;
   color: white;
   display: flex;
   justify-content: space-between;
@@ -12,8 +12,6 @@ body{
   gap: 2rem;
   padding: 0 1rem;
 }
-
-
 
 
 .container {
