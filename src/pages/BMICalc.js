@@ -9,7 +9,7 @@ export default function BMICalc() {
 
     let handleKeyDown = (event) => {
           console.log(height, weight)
-          setResult(  ((weight/height)/height)  )
+          setResult(  ((weight/height*100)/height*100)  )
     }
 
 
@@ -17,7 +17,7 @@ export default function BMICalc() {
          <>
          <h1> BMI Calculator </h1>
          <form>
-            <label>Enter your height in meter: 
+            <label>Enter your height in cm:  <t></t> 
                 <input
                 type="text" 
                 value={height}
@@ -27,7 +27,7 @@ export default function BMICalc() {
             </label>
         </form>
         <form>
-            <label>Enter your weight in kg:
+            <label>Enter your weight in kg: <t></t> 
                 <input
                 type="text" 
                 value={weight}
@@ -36,18 +36,33 @@ export default function BMICalc() {
                 />
             </label>
         </form>
-        <label>Result:
-                <input
-                type="text"
-                value={result}
-                onKeyDown={handleKeyDown} />
-         </label>
+        <br></br>
+        <div>
+            <label>Result: <t></t></label>
+            <span>{result}</span>
+        </div>
          <div>
             <button onClick={handleKeyDown}> Compute BMI </button>
          </div>
-
+{/* Display message based on BMI category */}
+        {result !== "" && (
+            <p style={{ fontSize: "18px", fontWeight: "bold" }}>
+                {result < 18.5 && (
+                    <span style={{ color: "blue" }}>You are underweight. Consider a balanced diet with more nutrients.</span>
+                )}
+                {result >= 18.5 && result < 24.9 && (
+                    <span style={{ color: "green" }}>You have a normal weight. Keep up your healthy lifestyle!</span>
+                )}
+                {result >= 25 && result < 29.9 && (
+                    <span style={{ color: "orange" }}>You are overweight. Regular exercise and a healthy diet can help.</span>
+                )}
+                {result >= 30 && (
+                    <span style={{ color: "red" }}>You are obese. It's important to focus on a healthier lifestyle.</span>
+                )}
+            </p>
+        )}
          </>
-         )
+    )
 } 
 
 
